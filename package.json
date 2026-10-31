@@ -1,0 +1,12 @@
+{
+  "name": "metro-file-map-watcher-start-timeout",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "metro serve"
+  },
+  "dependencies": {
+    "metro": "0.87.2",
+    "metro-config": "0.87.2"
+  }
+}
