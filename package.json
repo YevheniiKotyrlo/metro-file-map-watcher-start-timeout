@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "metro serve"
+    "start": "metro serve",
+    "reproduce": "node repro.js"
   },
   "dependencies": {
-    "metro": "0.87.2",
-    "metro-config": "0.87.2"
+    "metro": "0.88.0",
+    "metro-config": "0.88.0"
   }
 }

@@ -2,11 +2,12 @@
 
 Without Watchman on Windows and Linux, `metro-file-map` starts its fallback watcher by walking every folder of every watch root and opening one `fs.watch` per folder, so the start takes longer the larger the tree and the busier the machine. `Watcher.js` gives that start a fixed 240 s (`MAX_WAIT_TIME`) and then rejects with `Failed to start watch mode.`, so Metro never becomes ready and every bundle request fails, though the watcher was still making progress and goes on starting after the rejection.
 
-This repository is a plain Metro 0.87.2 project with:
+This repository is a plain Metro 0.88.0 project with:
 
 - `make-tree.js`, which lays out a tree shaped like a large `node_modules` install under `tree/`;
 - `start-servers.js`, which starts Metro servers on the project at once, as that many terminals running `npm start -- --port <port>` would, requests the bundle from each and reports how each request ended and when;
-- `use-metro-main.js`, which puts every package a built react/metro checkout holds in place of the installed one.
+- `use-metro-main.js`, which puts every package a built react/metro checkout holds in place of the installed one;
+- `repro.js`, which runs steps 2 to 4 below in order and exits 1 while the server over the tree fails with `Failed to start watch mode.`, 0 once it serves the bundle, and 2 when the control fails or a step fails another way.
 
 ## Steps
 
@@ -30,6 +31,8 @@ Without Watchman, Node 22 or later, npm. Seen on Windows 11 with the clone on a 
    ```sh
    node start-servers.js 1
    ```
+
+`node repro.js` runs steps 2 to 4.
 
 Expected: the bundle is served at step 4, later than at step 2.
 
