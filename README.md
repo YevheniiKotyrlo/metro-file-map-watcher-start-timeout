@@ -7,7 +7,8 @@ This repository is a plain Metro 0.88.0 project with:
 - `make-tree.js`, which lays out a tree shaped like a large `node_modules` install under `tree/`;
 - `start-servers.js`, which starts Metro servers on the project at once, as that many terminals running `npm start -- --port <port>` would, requests the bundle from each and reports how each request ended and when;
 - `use-metro-main.js`, which puts every package a built react/metro checkout holds in place of the installed one;
-- `repro.js`, which runs steps 2 to 4 below in order and exits 1 while the server over the tree fails with `Failed to start watch mode.`, 0 once it serves the bundle, and 2 when the control fails or a step fails another way.
+- `slow-watch.js`, which `start-servers.js` preloads when `SLOW_WATCH_MS` is set, to make each `fs.watch` call take that many milliseconds, standing in for a slower disk or a busier machine;
+- `repro.js`, which runs steps 2 to 4 below in order with `SLOW_WATCH_MS=8` and exits 1 while the server over the tree fails with `Failed to start watch mode.`, 0 once it serves the bundle, and 2 when the control fails or a step fails another way.
 
 ## Steps
 
@@ -32,7 +33,7 @@ Without Watchman, Node 22 or later, npm. Seen on Windows 11 with the clone on a 
    node start-servers.js 1
    ```
 
-`node repro.js` runs steps 2 to 4.
+`node repro.js` runs steps 2 to 4 with each `fs.watch` call made to take 8 ms, so that the fallback watcher's start over the tree outlasts 240 s on any machine; `node repro.js 30000 0` runs them as they are.
 
 Expected: the bundle is served at step 4, later than at step 2.
 
